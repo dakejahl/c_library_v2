@@ -10,7 +10,7 @@
     #error Wrong include order: MAVLINK_COMMON.H MUST NOT BE DIRECTLY USED. Include mavlink.h from the same directory instead or set ALL AND EVERY defines from MAVLINK.H manually accordingly, including the #define MAVLINK_H call.
 #endif
 
-#define MAVLINK_COMMON_XML_HASH -5511579898570045741
+#define MAVLINK_COMMON_XML_HASH 887525443462439769
 
 #ifdef __cplusplus
 extern "C" {
@@ -594,8 +594,8 @@ typedef enum ACTUATOR_CONFIGURATION
    ACTUATOR_CONFIGURATION_3D_MODE_OFF=3, /* Permanently set the actuator (ESC) to non 3D mode (non-reversible thrust). | */
    ACTUATOR_CONFIGURATION_SPIN_DIRECTION1=4, /* Permanently set the actuator (ESC) to spin direction 1 (which can be clockwise or counter-clockwise). | */
    ACTUATOR_CONFIGURATION_SPIN_DIRECTION2=5, /* Permanently set the actuator (ESC) to spin direction 2 (opposite of direction 1). | */
-   ACTUATOR_CONFIGURATION_READ_SETTINGS=6, /* Request ESC Settings. | */
-   ACTUATOR_CONFIGURATION_WRITE_SETTING=7, /* Write a single ESC Setting. The param2 of the command is used for the uin8t address of the setting to write. The param3 of the command is used for the uint8 value to write. | */
+   ACTUATOR_CONFIGURATION_READ_SETTINGS=6, /* Request ESC Settings. A response of ESC_RAW_SETTINGS should be returned. | */
+   ACTUATOR_CONFIGURATION_WRITE_SETTING=7, /* Write a single ESC Setting. The param2 of the command is used for the address of the setting to write. The param3 of the command is used for the value to write. | */
    ACTUATOR_CONFIGURATION_ENUM_END=8, /*  | */
 } ACTUATOR_CONFIGURATION;
 #endif

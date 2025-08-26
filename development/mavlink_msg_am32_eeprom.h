@@ -6,19 +6,21 @@
 
 typedef struct __mavlink_am32_eeprom_t {
  uint32_t write_mask[6]; /*<  Bitmask indicating which bytes in the data array should be written (only used in write mode). Each bit corresponds to a byte index in the data array (bit 0 of write_mask[0] = data[0], bit 31 of write_mask[0] = data[31], bit 0 of write_mask[1] = data[32], etc.). Set bits indicate bytes to write, cleared bits indicate bytes to skip. This allows precise updates of individual parameters without overwriting the entire EEPROM.*/
+ uint8_t target_system; /*<  System ID (ID of target system, normally flight controller).*/
+ uint8_t target_component; /*<  Component ID (normally 0 for broadcast).*/
  uint8_t index; /*<  Index of the ESC (0 = ESC1, 1 = ESC2, etc.).*/
  uint8_t mode; /*<  Operation mode: 0 = readout, 1 = write request.*/
  uint8_t length; /*<  Number of valid bytes in data array.*/
  uint8_t data[192]; /*<  Raw AM32 EEPROM data. Unused bytes should be set to zero. Note: the AM32 EEPROM is currently only 192 bytes long. This array has been sized to use the maximum payload length for a MAVLink message in an attempt to future-proof the message in case AM32 extends the EEPROM data length.*/
 } mavlink_am32_eeprom_t;
 
-#define MAVLINK_MSG_ID_AM32_EEPROM_LEN 219
-#define MAVLINK_MSG_ID_AM32_EEPROM_MIN_LEN 219
-#define MAVLINK_MSG_ID_292_LEN 219
-#define MAVLINK_MSG_ID_292_MIN_LEN 219
+#define MAVLINK_MSG_ID_AM32_EEPROM_LEN 221
+#define MAVLINK_MSG_ID_AM32_EEPROM_MIN_LEN 221
+#define MAVLINK_MSG_ID_292_LEN 221
+#define MAVLINK_MSG_ID_292_MIN_LEN 221
 
-#define MAVLINK_MSG_ID_AM32_EEPROM_CRC 234
-#define MAVLINK_MSG_ID_292_CRC 234
+#define MAVLINK_MSG_ID_AM32_EEPROM_CRC 109
+#define MAVLINK_MSG_ID_292_CRC 109
 
 #define MAVLINK_MSG_AM32_EEPROM_FIELD_WRITE_MASK_LEN 6
 #define MAVLINK_MSG_AM32_EEPROM_FIELD_DATA_LEN 192
@@ -27,23 +29,27 @@ typedef struct __mavlink_am32_eeprom_t {
 #define MAVLINK_MESSAGE_INFO_AM32_EEPROM { \
     292, \
     "AM32_EEPROM", \
-    5, \
-    {  { "index", NULL, MAVLINK_TYPE_UINT8_T, 0, 24, offsetof(mavlink_am32_eeprom_t, index) }, \
-         { "mode", NULL, MAVLINK_TYPE_UINT8_T, 0, 25, offsetof(mavlink_am32_eeprom_t, mode) }, \
+    7, \
+    {  { "target_system", NULL, MAVLINK_TYPE_UINT8_T, 0, 24, offsetof(mavlink_am32_eeprom_t, target_system) }, \
+         { "target_component", NULL, MAVLINK_TYPE_UINT8_T, 0, 25, offsetof(mavlink_am32_eeprom_t, target_component) }, \
+         { "index", NULL, MAVLINK_TYPE_UINT8_T, 0, 26, offsetof(mavlink_am32_eeprom_t, index) }, \
+         { "mode", NULL, MAVLINK_TYPE_UINT8_T, 0, 27, offsetof(mavlink_am32_eeprom_t, mode) }, \
          { "write_mask", NULL, MAVLINK_TYPE_UINT32_T, 6, 0, offsetof(mavlink_am32_eeprom_t, write_mask) }, \
-         { "length", NULL, MAVLINK_TYPE_UINT8_T, 0, 26, offsetof(mavlink_am32_eeprom_t, length) }, \
-         { "data", NULL, MAVLINK_TYPE_UINT8_T, 192, 27, offsetof(mavlink_am32_eeprom_t, data) }, \
+         { "length", NULL, MAVLINK_TYPE_UINT8_T, 0, 28, offsetof(mavlink_am32_eeprom_t, length) }, \
+         { "data", NULL, MAVLINK_TYPE_UINT8_T, 192, 29, offsetof(mavlink_am32_eeprom_t, data) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_AM32_EEPROM { \
     "AM32_EEPROM", \
-    5, \
-    {  { "index", NULL, MAVLINK_TYPE_UINT8_T, 0, 24, offsetof(mavlink_am32_eeprom_t, index) }, \
-         { "mode", NULL, MAVLINK_TYPE_UINT8_T, 0, 25, offsetof(mavlink_am32_eeprom_t, mode) }, \
+    7, \
+    {  { "target_system", NULL, MAVLINK_TYPE_UINT8_T, 0, 24, offsetof(mavlink_am32_eeprom_t, target_system) }, \
+         { "target_component", NULL, MAVLINK_TYPE_UINT8_T, 0, 25, offsetof(mavlink_am32_eeprom_t, target_component) }, \
+         { "index", NULL, MAVLINK_TYPE_UINT8_T, 0, 26, offsetof(mavlink_am32_eeprom_t, index) }, \
+         { "mode", NULL, MAVLINK_TYPE_UINT8_T, 0, 27, offsetof(mavlink_am32_eeprom_t, mode) }, \
          { "write_mask", NULL, MAVLINK_TYPE_UINT32_T, 6, 0, offsetof(mavlink_am32_eeprom_t, write_mask) }, \
-         { "length", NULL, MAVLINK_TYPE_UINT8_T, 0, 26, offsetof(mavlink_am32_eeprom_t, length) }, \
-         { "data", NULL, MAVLINK_TYPE_UINT8_T, 192, 27, offsetof(mavlink_am32_eeprom_t, data) }, \
+         { "length", NULL, MAVLINK_TYPE_UINT8_T, 0, 28, offsetof(mavlink_am32_eeprom_t, length) }, \
+         { "data", NULL, MAVLINK_TYPE_UINT8_T, 192, 29, offsetof(mavlink_am32_eeprom_t, data) }, \
          } \
 }
 #endif
@@ -54,6 +60,8 @@ typedef struct __mavlink_am32_eeprom_t {
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
+ * @param target_system  System ID (ID of target system, normally flight controller).
+ * @param target_component  Component ID (normally 0 for broadcast).
  * @param index  Index of the ESC (0 = ESC1, 1 = ESC2, etc.).
  * @param mode  Operation mode: 0 = readout, 1 = write request.
  * @param write_mask  Bitmask indicating which bytes in the data array should be written (only used in write mode). Each bit corresponds to a byte index in the data array (bit 0 of write_mask[0] = data[0], bit 31 of write_mask[0] = data[31], bit 0 of write_mask[1] = data[32], etc.). Set bits indicate bytes to write, cleared bits indicate bytes to skip. This allows precise updates of individual parameters without overwriting the entire EEPROM.
@@ -62,18 +70,22 @@ typedef struct __mavlink_am32_eeprom_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_am32_eeprom_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t index, uint8_t mode, const uint32_t *write_mask, uint8_t length, const uint8_t *data)
+                               uint8_t target_system, uint8_t target_component, uint8_t index, uint8_t mode, const uint32_t *write_mask, uint8_t length, const uint8_t *data)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AM32_EEPROM_LEN];
-    _mav_put_uint8_t(buf, 24, index);
-    _mav_put_uint8_t(buf, 25, mode);
-    _mav_put_uint8_t(buf, 26, length);
+    _mav_put_uint8_t(buf, 24, target_system);
+    _mav_put_uint8_t(buf, 25, target_component);
+    _mav_put_uint8_t(buf, 26, index);
+    _mav_put_uint8_t(buf, 27, mode);
+    _mav_put_uint8_t(buf, 28, length);
     _mav_put_uint32_t_array(buf, 0, write_mask, 6);
-    _mav_put_uint8_t_array(buf, 27, data, 192);
+    _mav_put_uint8_t_array(buf, 29, data, 192);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AM32_EEPROM_LEN);
 #else
     mavlink_am32_eeprom_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
     packet.index = index;
     packet.mode = mode;
     packet.length = length;
@@ -93,6 +105,8 @@ static inline uint16_t mavlink_msg_am32_eeprom_pack(uint8_t system_id, uint8_t c
  * @param status MAVLink status structure
  * @param msg The MAVLink message to compress the data into
  *
+ * @param target_system  System ID (ID of target system, normally flight controller).
+ * @param target_component  Component ID (normally 0 for broadcast).
  * @param index  Index of the ESC (0 = ESC1, 1 = ESC2, etc.).
  * @param mode  Operation mode: 0 = readout, 1 = write request.
  * @param write_mask  Bitmask indicating which bytes in the data array should be written (only used in write mode). Each bit corresponds to a byte index in the data array (bit 0 of write_mask[0] = data[0], bit 31 of write_mask[0] = data[31], bit 0 of write_mask[1] = data[32], etc.). Set bits indicate bytes to write, cleared bits indicate bytes to skip. This allows precise updates of individual parameters without overwriting the entire EEPROM.
@@ -101,18 +115,22 @@ static inline uint16_t mavlink_msg_am32_eeprom_pack(uint8_t system_id, uint8_t c
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_am32_eeprom_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint8_t index, uint8_t mode, const uint32_t *write_mask, uint8_t length, const uint8_t *data)
+                               uint8_t target_system, uint8_t target_component, uint8_t index, uint8_t mode, const uint32_t *write_mask, uint8_t length, const uint8_t *data)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AM32_EEPROM_LEN];
-    _mav_put_uint8_t(buf, 24, index);
-    _mav_put_uint8_t(buf, 25, mode);
-    _mav_put_uint8_t(buf, 26, length);
+    _mav_put_uint8_t(buf, 24, target_system);
+    _mav_put_uint8_t(buf, 25, target_component);
+    _mav_put_uint8_t(buf, 26, index);
+    _mav_put_uint8_t(buf, 27, mode);
+    _mav_put_uint8_t(buf, 28, length);
     _mav_put_uint32_t_array(buf, 0, write_mask, 6);
-    _mav_put_uint8_t_array(buf, 27, data, 192);
+    _mav_put_uint8_t_array(buf, 29, data, 192);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AM32_EEPROM_LEN);
 #else
     mavlink_am32_eeprom_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
     packet.index = index;
     packet.mode = mode;
     packet.length = length;
@@ -135,6 +153,8 @@ static inline uint16_t mavlink_msg_am32_eeprom_pack_status(uint8_t system_id, ui
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
+ * @param target_system  System ID (ID of target system, normally flight controller).
+ * @param target_component  Component ID (normally 0 for broadcast).
  * @param index  Index of the ESC (0 = ESC1, 1 = ESC2, etc.).
  * @param mode  Operation mode: 0 = readout, 1 = write request.
  * @param write_mask  Bitmask indicating which bytes in the data array should be written (only used in write mode). Each bit corresponds to a byte index in the data array (bit 0 of write_mask[0] = data[0], bit 31 of write_mask[0] = data[31], bit 0 of write_mask[1] = data[32], etc.). Set bits indicate bytes to write, cleared bits indicate bytes to skip. This allows precise updates of individual parameters without overwriting the entire EEPROM.
@@ -144,18 +164,22 @@ static inline uint16_t mavlink_msg_am32_eeprom_pack_status(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_am32_eeprom_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t index,uint8_t mode,const uint32_t *write_mask,uint8_t length,const uint8_t *data)
+                                   uint8_t target_system,uint8_t target_component,uint8_t index,uint8_t mode,const uint32_t *write_mask,uint8_t length,const uint8_t *data)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AM32_EEPROM_LEN];
-    _mav_put_uint8_t(buf, 24, index);
-    _mav_put_uint8_t(buf, 25, mode);
-    _mav_put_uint8_t(buf, 26, length);
+    _mav_put_uint8_t(buf, 24, target_system);
+    _mav_put_uint8_t(buf, 25, target_component);
+    _mav_put_uint8_t(buf, 26, index);
+    _mav_put_uint8_t(buf, 27, mode);
+    _mav_put_uint8_t(buf, 28, length);
     _mav_put_uint32_t_array(buf, 0, write_mask, 6);
-    _mav_put_uint8_t_array(buf, 27, data, 192);
+    _mav_put_uint8_t_array(buf, 29, data, 192);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AM32_EEPROM_LEN);
 #else
     mavlink_am32_eeprom_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
     packet.index = index;
     packet.mode = mode;
     packet.length = length;
@@ -178,7 +202,7 @@ static inline uint16_t mavlink_msg_am32_eeprom_pack_chan(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_am32_eeprom_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_am32_eeprom_t* am32_eeprom)
 {
-    return mavlink_msg_am32_eeprom_pack(system_id, component_id, msg, am32_eeprom->index, am32_eeprom->mode, am32_eeprom->write_mask, am32_eeprom->length, am32_eeprom->data);
+    return mavlink_msg_am32_eeprom_pack(system_id, component_id, msg, am32_eeprom->target_system, am32_eeprom->target_component, am32_eeprom->index, am32_eeprom->mode, am32_eeprom->write_mask, am32_eeprom->length, am32_eeprom->data);
 }
 
 /**
@@ -192,7 +216,7 @@ static inline uint16_t mavlink_msg_am32_eeprom_encode(uint8_t system_id, uint8_t
  */
 static inline uint16_t mavlink_msg_am32_eeprom_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_am32_eeprom_t* am32_eeprom)
 {
-    return mavlink_msg_am32_eeprom_pack_chan(system_id, component_id, chan, msg, am32_eeprom->index, am32_eeprom->mode, am32_eeprom->write_mask, am32_eeprom->length, am32_eeprom->data);
+    return mavlink_msg_am32_eeprom_pack_chan(system_id, component_id, chan, msg, am32_eeprom->target_system, am32_eeprom->target_component, am32_eeprom->index, am32_eeprom->mode, am32_eeprom->write_mask, am32_eeprom->length, am32_eeprom->data);
 }
 
 /**
@@ -206,13 +230,15 @@ static inline uint16_t mavlink_msg_am32_eeprom_encode_chan(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_am32_eeprom_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_am32_eeprom_t* am32_eeprom)
 {
-    return mavlink_msg_am32_eeprom_pack_status(system_id, component_id, _status, msg,  am32_eeprom->index, am32_eeprom->mode, am32_eeprom->write_mask, am32_eeprom->length, am32_eeprom->data);
+    return mavlink_msg_am32_eeprom_pack_status(system_id, component_id, _status, msg,  am32_eeprom->target_system, am32_eeprom->target_component, am32_eeprom->index, am32_eeprom->mode, am32_eeprom->write_mask, am32_eeprom->length, am32_eeprom->data);
 }
 
 /**
  * @brief Send a am32_eeprom message
  * @param chan MAVLink channel to send the message
  *
+ * @param target_system  System ID (ID of target system, normally flight controller).
+ * @param target_component  Component ID (normally 0 for broadcast).
  * @param index  Index of the ESC (0 = ESC1, 1 = ESC2, etc.).
  * @param mode  Operation mode: 0 = readout, 1 = write request.
  * @param write_mask  Bitmask indicating which bytes in the data array should be written (only used in write mode). Each bit corresponds to a byte index in the data array (bit 0 of write_mask[0] = data[0], bit 31 of write_mask[0] = data[31], bit 0 of write_mask[1] = data[32], etc.). Set bits indicate bytes to write, cleared bits indicate bytes to skip. This allows precise updates of individual parameters without overwriting the entire EEPROM.
@@ -221,18 +247,22 @@ static inline uint16_t mavlink_msg_am32_eeprom_encode_status(uint8_t system_id, 
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_am32_eeprom_send(mavlink_channel_t chan, uint8_t index, uint8_t mode, const uint32_t *write_mask, uint8_t length, const uint8_t *data)
+static inline void mavlink_msg_am32_eeprom_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, uint8_t index, uint8_t mode, const uint32_t *write_mask, uint8_t length, const uint8_t *data)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AM32_EEPROM_LEN];
-    _mav_put_uint8_t(buf, 24, index);
-    _mav_put_uint8_t(buf, 25, mode);
-    _mav_put_uint8_t(buf, 26, length);
+    _mav_put_uint8_t(buf, 24, target_system);
+    _mav_put_uint8_t(buf, 25, target_component);
+    _mav_put_uint8_t(buf, 26, index);
+    _mav_put_uint8_t(buf, 27, mode);
+    _mav_put_uint8_t(buf, 28, length);
     _mav_put_uint32_t_array(buf, 0, write_mask, 6);
-    _mav_put_uint8_t_array(buf, 27, data, 192);
+    _mav_put_uint8_t_array(buf, 29, data, 192);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AM32_EEPROM, buf, MAVLINK_MSG_ID_AM32_EEPROM_MIN_LEN, MAVLINK_MSG_ID_AM32_EEPROM_LEN, MAVLINK_MSG_ID_AM32_EEPROM_CRC);
 #else
     mavlink_am32_eeprom_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
     packet.index = index;
     packet.mode = mode;
     packet.length = length;
@@ -250,7 +280,7 @@ static inline void mavlink_msg_am32_eeprom_send(mavlink_channel_t chan, uint8_t 
 static inline void mavlink_msg_am32_eeprom_send_struct(mavlink_channel_t chan, const mavlink_am32_eeprom_t* am32_eeprom)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_am32_eeprom_send(chan, am32_eeprom->index, am32_eeprom->mode, am32_eeprom->write_mask, am32_eeprom->length, am32_eeprom->data);
+    mavlink_msg_am32_eeprom_send(chan, am32_eeprom->target_system, am32_eeprom->target_component, am32_eeprom->index, am32_eeprom->mode, am32_eeprom->write_mask, am32_eeprom->length, am32_eeprom->data);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AM32_EEPROM, (const char *)am32_eeprom, MAVLINK_MSG_ID_AM32_EEPROM_MIN_LEN, MAVLINK_MSG_ID_AM32_EEPROM_LEN, MAVLINK_MSG_ID_AM32_EEPROM_CRC);
 #endif
@@ -264,18 +294,22 @@ static inline void mavlink_msg_am32_eeprom_send_struct(mavlink_channel_t chan, c
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_am32_eeprom_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t index, uint8_t mode, const uint32_t *write_mask, uint8_t length, const uint8_t *data)
+static inline void mavlink_msg_am32_eeprom_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t target_system, uint8_t target_component, uint8_t index, uint8_t mode, const uint32_t *write_mask, uint8_t length, const uint8_t *data)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_uint8_t(buf, 24, index);
-    _mav_put_uint8_t(buf, 25, mode);
-    _mav_put_uint8_t(buf, 26, length);
+    _mav_put_uint8_t(buf, 24, target_system);
+    _mav_put_uint8_t(buf, 25, target_component);
+    _mav_put_uint8_t(buf, 26, index);
+    _mav_put_uint8_t(buf, 27, mode);
+    _mav_put_uint8_t(buf, 28, length);
     _mav_put_uint32_t_array(buf, 0, write_mask, 6);
-    _mav_put_uint8_t_array(buf, 27, data, 192);
+    _mav_put_uint8_t_array(buf, 29, data, 192);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AM32_EEPROM, buf, MAVLINK_MSG_ID_AM32_EEPROM_MIN_LEN, MAVLINK_MSG_ID_AM32_EEPROM_LEN, MAVLINK_MSG_ID_AM32_EEPROM_CRC);
 #else
     mavlink_am32_eeprom_t *packet = (mavlink_am32_eeprom_t *)msgbuf;
+    packet->target_system = target_system;
+    packet->target_component = target_component;
     packet->index = index;
     packet->mode = mode;
     packet->length = length;
@@ -292,13 +326,33 @@ static inline void mavlink_msg_am32_eeprom_send_buf(mavlink_message_t *msgbuf, m
 
 
 /**
+ * @brief Get field target_system from am32_eeprom message
+ *
+ * @return  System ID (ID of target system, normally flight controller).
+ */
+static inline uint8_t mavlink_msg_am32_eeprom_get_target_system(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  24);
+}
+
+/**
+ * @brief Get field target_component from am32_eeprom message
+ *
+ * @return  Component ID (normally 0 for broadcast).
+ */
+static inline uint8_t mavlink_msg_am32_eeprom_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  25);
+}
+
+/**
  * @brief Get field index from am32_eeprom message
  *
  * @return  Index of the ESC (0 = ESC1, 1 = ESC2, etc.).
  */
 static inline uint8_t mavlink_msg_am32_eeprom_get_index(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  24);
+    return _MAV_RETURN_uint8_t(msg,  26);
 }
 
 /**
@@ -308,7 +362,7 @@ static inline uint8_t mavlink_msg_am32_eeprom_get_index(const mavlink_message_t*
  */
 static inline uint8_t mavlink_msg_am32_eeprom_get_mode(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  25);
+    return _MAV_RETURN_uint8_t(msg,  27);
 }
 
 /**
@@ -328,7 +382,7 @@ static inline uint16_t mavlink_msg_am32_eeprom_get_write_mask(const mavlink_mess
  */
 static inline uint8_t mavlink_msg_am32_eeprom_get_length(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  26);
+    return _MAV_RETURN_uint8_t(msg,  28);
 }
 
 /**
@@ -338,7 +392,7 @@ static inline uint8_t mavlink_msg_am32_eeprom_get_length(const mavlink_message_t
  */
 static inline uint16_t mavlink_msg_am32_eeprom_get_data(const mavlink_message_t* msg, uint8_t *data)
 {
-    return _MAV_RETURN_uint8_t_array(msg, data, 192,  27);
+    return _MAV_RETURN_uint8_t_array(msg, data, 192,  29);
 }
 
 /**
@@ -351,6 +405,8 @@ static inline void mavlink_msg_am32_eeprom_decode(const mavlink_message_t* msg, 
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     mavlink_msg_am32_eeprom_get_write_mask(msg, am32_eeprom->write_mask);
+    am32_eeprom->target_system = mavlink_msg_am32_eeprom_get_target_system(msg);
+    am32_eeprom->target_component = mavlink_msg_am32_eeprom_get_target_component(msg);
     am32_eeprom->index = mavlink_msg_am32_eeprom_get_index(msg);
     am32_eeprom->mode = mavlink_msg_am32_eeprom_get_mode(msg);
     am32_eeprom->length = mavlink_msg_am32_eeprom_get_length(msg);

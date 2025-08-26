@@ -5,45 +5,45 @@
 
 
 typedef struct __mavlink_am32_eeprom_t {
- uint32_t write_mask[7]; /*<  Bitmask indicating which bytes in the data array should be written (only used in write mode). Each bit corresponds to a byte index in the data array (bit 0 of write_mask[0] = data[0], bit 31 of write_mask[0] = data[31], bit 0 of write_mask[1] = data[32], etc.). Set bits indicate bytes to write, cleared bits indicate bytes to skip. This allows precise updates of individual parameters without overwriting the entire EEPROM.*/
+ uint32_t write_mask[6]; /*<  Bitmask indicating which bytes in the data array should be written (only used in write mode). Each bit corresponds to a byte index in the data array (bit 0 of write_mask[0] = data[0], bit 31 of write_mask[0] = data[31], bit 0 of write_mask[1] = data[32], etc.). Set bits indicate bytes to write, cleared bits indicate bytes to skip. This allows precise updates of individual parameters without overwriting the entire EEPROM.*/
  uint8_t index; /*<  Index of the ESC (0 = ESC1, 1 = ESC2, etc.).*/
  uint8_t mode; /*<  Operation mode: 0 = readout, 1 = write request.*/
  uint8_t length; /*<  Number of valid bytes in data array.*/
- uint8_t data[224]; /*<  Raw AM32 EEPROM data. Unused bytes should be set to zero. Note: the AM32 EEPROM is currently only 192 bytes long. This array has been sized to use the maximum payload length for a MAVLink message in an attempt to future-proof the message in case AM32 extends the EEPROM data length.*/
+ uint8_t data[192]; /*<  Raw AM32 EEPROM data. Unused bytes should be set to zero. Note: the AM32 EEPROM is currently only 192 bytes long. This array has been sized to use the maximum payload length for a MAVLink message in an attempt to future-proof the message in case AM32 extends the EEPROM data length.*/
 } mavlink_am32_eeprom_t;
 
-#define MAVLINK_MSG_ID_AM32_EEPROM_LEN 255
-#define MAVLINK_MSG_ID_AM32_EEPROM_MIN_LEN 255
-#define MAVLINK_MSG_ID_292_LEN 255
-#define MAVLINK_MSG_ID_292_MIN_LEN 255
+#define MAVLINK_MSG_ID_AM32_EEPROM_LEN 219
+#define MAVLINK_MSG_ID_AM32_EEPROM_MIN_LEN 219
+#define MAVLINK_MSG_ID_292_LEN 219
+#define MAVLINK_MSG_ID_292_MIN_LEN 219
 
-#define MAVLINK_MSG_ID_AM32_EEPROM_CRC 206
-#define MAVLINK_MSG_ID_292_CRC 206
+#define MAVLINK_MSG_ID_AM32_EEPROM_CRC 234
+#define MAVLINK_MSG_ID_292_CRC 234
 
-#define MAVLINK_MSG_AM32_EEPROM_FIELD_WRITE_MASK_LEN 7
-#define MAVLINK_MSG_AM32_EEPROM_FIELD_DATA_LEN 224
+#define MAVLINK_MSG_AM32_EEPROM_FIELD_WRITE_MASK_LEN 6
+#define MAVLINK_MSG_AM32_EEPROM_FIELD_DATA_LEN 192
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AM32_EEPROM { \
     292, \
     "AM32_EEPROM", \
     5, \
-    {  { "index", NULL, MAVLINK_TYPE_UINT8_T, 0, 28, offsetof(mavlink_am32_eeprom_t, index) }, \
-         { "mode", NULL, MAVLINK_TYPE_UINT8_T, 0, 29, offsetof(mavlink_am32_eeprom_t, mode) }, \
-         { "write_mask", NULL, MAVLINK_TYPE_UINT32_T, 7, 0, offsetof(mavlink_am32_eeprom_t, write_mask) }, \
-         { "length", NULL, MAVLINK_TYPE_UINT8_T, 0, 30, offsetof(mavlink_am32_eeprom_t, length) }, \
-         { "data", NULL, MAVLINK_TYPE_UINT8_T, 224, 31, offsetof(mavlink_am32_eeprom_t, data) }, \
+    {  { "index", NULL, MAVLINK_TYPE_UINT8_T, 0, 24, offsetof(mavlink_am32_eeprom_t, index) }, \
+         { "mode", NULL, MAVLINK_TYPE_UINT8_T, 0, 25, offsetof(mavlink_am32_eeprom_t, mode) }, \
+         { "write_mask", NULL, MAVLINK_TYPE_UINT32_T, 6, 0, offsetof(mavlink_am32_eeprom_t, write_mask) }, \
+         { "length", NULL, MAVLINK_TYPE_UINT8_T, 0, 26, offsetof(mavlink_am32_eeprom_t, length) }, \
+         { "data", NULL, MAVLINK_TYPE_UINT8_T, 192, 27, offsetof(mavlink_am32_eeprom_t, data) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_AM32_EEPROM { \
     "AM32_EEPROM", \
     5, \
-    {  { "index", NULL, MAVLINK_TYPE_UINT8_T, 0, 28, offsetof(mavlink_am32_eeprom_t, index) }, \
-         { "mode", NULL, MAVLINK_TYPE_UINT8_T, 0, 29, offsetof(mavlink_am32_eeprom_t, mode) }, \
-         { "write_mask", NULL, MAVLINK_TYPE_UINT32_T, 7, 0, offsetof(mavlink_am32_eeprom_t, write_mask) }, \
-         { "length", NULL, MAVLINK_TYPE_UINT8_T, 0, 30, offsetof(mavlink_am32_eeprom_t, length) }, \
-         { "data", NULL, MAVLINK_TYPE_UINT8_T, 224, 31, offsetof(mavlink_am32_eeprom_t, data) }, \
+    {  { "index", NULL, MAVLINK_TYPE_UINT8_T, 0, 24, offsetof(mavlink_am32_eeprom_t, index) }, \
+         { "mode", NULL, MAVLINK_TYPE_UINT8_T, 0, 25, offsetof(mavlink_am32_eeprom_t, mode) }, \
+         { "write_mask", NULL, MAVLINK_TYPE_UINT32_T, 6, 0, offsetof(mavlink_am32_eeprom_t, write_mask) }, \
+         { "length", NULL, MAVLINK_TYPE_UINT8_T, 0, 26, offsetof(mavlink_am32_eeprom_t, length) }, \
+         { "data", NULL, MAVLINK_TYPE_UINT8_T, 192, 27, offsetof(mavlink_am32_eeprom_t, data) }, \
          } \
 }
 #endif
@@ -66,19 +66,19 @@ static inline uint16_t mavlink_msg_am32_eeprom_pack(uint8_t system_id, uint8_t c
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AM32_EEPROM_LEN];
-    _mav_put_uint8_t(buf, 28, index);
-    _mav_put_uint8_t(buf, 29, mode);
-    _mav_put_uint8_t(buf, 30, length);
-    _mav_put_uint32_t_array(buf, 0, write_mask, 7);
-    _mav_put_uint8_t_array(buf, 31, data, 224);
+    _mav_put_uint8_t(buf, 24, index);
+    _mav_put_uint8_t(buf, 25, mode);
+    _mav_put_uint8_t(buf, 26, length);
+    _mav_put_uint32_t_array(buf, 0, write_mask, 6);
+    _mav_put_uint8_t_array(buf, 27, data, 192);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AM32_EEPROM_LEN);
 #else
     mavlink_am32_eeprom_t packet;
     packet.index = index;
     packet.mode = mode;
     packet.length = length;
-    mav_array_assign_uint32_t(packet.write_mask, write_mask, 7);
-    mav_array_assign_uint8_t(packet.data, data, 224);
+    mav_array_assign_uint32_t(packet.write_mask, write_mask, 6);
+    mav_array_assign_uint8_t(packet.data, data, 192);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AM32_EEPROM_LEN);
 #endif
 
@@ -105,19 +105,19 @@ static inline uint16_t mavlink_msg_am32_eeprom_pack_status(uint8_t system_id, ui
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AM32_EEPROM_LEN];
-    _mav_put_uint8_t(buf, 28, index);
-    _mav_put_uint8_t(buf, 29, mode);
-    _mav_put_uint8_t(buf, 30, length);
-    _mav_put_uint32_t_array(buf, 0, write_mask, 7);
-    _mav_put_uint8_t_array(buf, 31, data, 224);
+    _mav_put_uint8_t(buf, 24, index);
+    _mav_put_uint8_t(buf, 25, mode);
+    _mav_put_uint8_t(buf, 26, length);
+    _mav_put_uint32_t_array(buf, 0, write_mask, 6);
+    _mav_put_uint8_t_array(buf, 27, data, 192);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AM32_EEPROM_LEN);
 #else
     mavlink_am32_eeprom_t packet;
     packet.index = index;
     packet.mode = mode;
     packet.length = length;
-    mav_array_memcpy(packet.write_mask, write_mask, sizeof(uint32_t)*7);
-    mav_array_memcpy(packet.data, data, sizeof(uint8_t)*224);
+    mav_array_memcpy(packet.write_mask, write_mask, sizeof(uint32_t)*6);
+    mav_array_memcpy(packet.data, data, sizeof(uint8_t)*192);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AM32_EEPROM_LEN);
 #endif
 
@@ -148,19 +148,19 @@ static inline uint16_t mavlink_msg_am32_eeprom_pack_chan(uint8_t system_id, uint
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AM32_EEPROM_LEN];
-    _mav_put_uint8_t(buf, 28, index);
-    _mav_put_uint8_t(buf, 29, mode);
-    _mav_put_uint8_t(buf, 30, length);
-    _mav_put_uint32_t_array(buf, 0, write_mask, 7);
-    _mav_put_uint8_t_array(buf, 31, data, 224);
+    _mav_put_uint8_t(buf, 24, index);
+    _mav_put_uint8_t(buf, 25, mode);
+    _mav_put_uint8_t(buf, 26, length);
+    _mav_put_uint32_t_array(buf, 0, write_mask, 6);
+    _mav_put_uint8_t_array(buf, 27, data, 192);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_AM32_EEPROM_LEN);
 #else
     mavlink_am32_eeprom_t packet;
     packet.index = index;
     packet.mode = mode;
     packet.length = length;
-    mav_array_assign_uint32_t(packet.write_mask, write_mask, 7);
-    mav_array_assign_uint8_t(packet.data, data, 224);
+    mav_array_assign_uint32_t(packet.write_mask, write_mask, 6);
+    mav_array_assign_uint8_t(packet.data, data, 192);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_AM32_EEPROM_LEN);
 #endif
 
@@ -225,19 +225,19 @@ static inline void mavlink_msg_am32_eeprom_send(mavlink_channel_t chan, uint8_t 
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_AM32_EEPROM_LEN];
-    _mav_put_uint8_t(buf, 28, index);
-    _mav_put_uint8_t(buf, 29, mode);
-    _mav_put_uint8_t(buf, 30, length);
-    _mav_put_uint32_t_array(buf, 0, write_mask, 7);
-    _mav_put_uint8_t_array(buf, 31, data, 224);
+    _mav_put_uint8_t(buf, 24, index);
+    _mav_put_uint8_t(buf, 25, mode);
+    _mav_put_uint8_t(buf, 26, length);
+    _mav_put_uint32_t_array(buf, 0, write_mask, 6);
+    _mav_put_uint8_t_array(buf, 27, data, 192);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AM32_EEPROM, buf, MAVLINK_MSG_ID_AM32_EEPROM_MIN_LEN, MAVLINK_MSG_ID_AM32_EEPROM_LEN, MAVLINK_MSG_ID_AM32_EEPROM_CRC);
 #else
     mavlink_am32_eeprom_t packet;
     packet.index = index;
     packet.mode = mode;
     packet.length = length;
-    mav_array_assign_uint32_t(packet.write_mask, write_mask, 7);
-    mav_array_assign_uint8_t(packet.data, data, 224);
+    mav_array_assign_uint32_t(packet.write_mask, write_mask, 6);
+    mav_array_assign_uint8_t(packet.data, data, 192);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AM32_EEPROM, (const char *)&packet, MAVLINK_MSG_ID_AM32_EEPROM_MIN_LEN, MAVLINK_MSG_ID_AM32_EEPROM_LEN, MAVLINK_MSG_ID_AM32_EEPROM_CRC);
 #endif
 }
@@ -268,19 +268,19 @@ static inline void mavlink_msg_am32_eeprom_send_buf(mavlink_message_t *msgbuf, m
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_uint8_t(buf, 28, index);
-    _mav_put_uint8_t(buf, 29, mode);
-    _mav_put_uint8_t(buf, 30, length);
-    _mav_put_uint32_t_array(buf, 0, write_mask, 7);
-    _mav_put_uint8_t_array(buf, 31, data, 224);
+    _mav_put_uint8_t(buf, 24, index);
+    _mav_put_uint8_t(buf, 25, mode);
+    _mav_put_uint8_t(buf, 26, length);
+    _mav_put_uint32_t_array(buf, 0, write_mask, 6);
+    _mav_put_uint8_t_array(buf, 27, data, 192);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AM32_EEPROM, buf, MAVLINK_MSG_ID_AM32_EEPROM_MIN_LEN, MAVLINK_MSG_ID_AM32_EEPROM_LEN, MAVLINK_MSG_ID_AM32_EEPROM_CRC);
 #else
     mavlink_am32_eeprom_t *packet = (mavlink_am32_eeprom_t *)msgbuf;
     packet->index = index;
     packet->mode = mode;
     packet->length = length;
-    mav_array_assign_uint32_t(packet->write_mask, write_mask, 7);
-    mav_array_assign_uint8_t(packet->data, data, 224);
+    mav_array_assign_uint32_t(packet->write_mask, write_mask, 6);
+    mav_array_assign_uint8_t(packet->data, data, 192);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AM32_EEPROM, (const char *)packet, MAVLINK_MSG_ID_AM32_EEPROM_MIN_LEN, MAVLINK_MSG_ID_AM32_EEPROM_LEN, MAVLINK_MSG_ID_AM32_EEPROM_CRC);
 #endif
 }
@@ -298,7 +298,7 @@ static inline void mavlink_msg_am32_eeprom_send_buf(mavlink_message_t *msgbuf, m
  */
 static inline uint8_t mavlink_msg_am32_eeprom_get_index(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  28);
+    return _MAV_RETURN_uint8_t(msg,  24);
 }
 
 /**
@@ -308,7 +308,7 @@ static inline uint8_t mavlink_msg_am32_eeprom_get_index(const mavlink_message_t*
  */
 static inline uint8_t mavlink_msg_am32_eeprom_get_mode(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  29);
+    return _MAV_RETURN_uint8_t(msg,  25);
 }
 
 /**
@@ -318,7 +318,7 @@ static inline uint8_t mavlink_msg_am32_eeprom_get_mode(const mavlink_message_t* 
  */
 static inline uint16_t mavlink_msg_am32_eeprom_get_write_mask(const mavlink_message_t* msg, uint32_t *write_mask)
 {
-    return _MAV_RETURN_uint32_t_array(msg, write_mask, 7,  0);
+    return _MAV_RETURN_uint32_t_array(msg, write_mask, 6,  0);
 }
 
 /**
@@ -328,7 +328,7 @@ static inline uint16_t mavlink_msg_am32_eeprom_get_write_mask(const mavlink_mess
  */
 static inline uint8_t mavlink_msg_am32_eeprom_get_length(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  30);
+    return _MAV_RETURN_uint8_t(msg,  26);
 }
 
 /**
@@ -338,7 +338,7 @@ static inline uint8_t mavlink_msg_am32_eeprom_get_length(const mavlink_message_t
  */
 static inline uint16_t mavlink_msg_am32_eeprom_get_data(const mavlink_message_t* msg, uint8_t *data)
 {
-    return _MAV_RETURN_uint8_t_array(msg, data, 224,  31);
+    return _MAV_RETURN_uint8_t_array(msg, data, 192,  27);
 }
 
 /**

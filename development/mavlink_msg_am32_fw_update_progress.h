@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE AM32_FW_UPDATE_PROGRESS PACKING
 
-#define MAVLINK_MSG_ID_AM32_FW_UPDATE_PROGRESS 294
+#define MAVLINK_MSG_ID_AM32_FW_UPDATE_PROGRESS 293
 
 
 typedef struct __mavlink_am32_fw_update_progress_t {
@@ -11,17 +11,17 @@ typedef struct __mavlink_am32_fw_update_progress_t {
 
 #define MAVLINK_MSG_ID_AM32_FW_UPDATE_PROGRESS_LEN 2
 #define MAVLINK_MSG_ID_AM32_FW_UPDATE_PROGRESS_MIN_LEN 2
-#define MAVLINK_MSG_ID_294_LEN 2
-#define MAVLINK_MSG_ID_294_MIN_LEN 2
+#define MAVLINK_MSG_ID_293_LEN 2
+#define MAVLINK_MSG_ID_293_MIN_LEN 2
 
 #define MAVLINK_MSG_ID_AM32_FW_UPDATE_PROGRESS_CRC 5
-#define MAVLINK_MSG_ID_294_CRC 5
+#define MAVLINK_MSG_ID_293_CRC 5
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_AM32_FW_UPDATE_PROGRESS { \
-    294, \
+    293, \
     "AM32_FW_UPDATE_PROGRESS", \
     2, \
     {  { "index", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_am32_fw_update_progress_t, index) }, \

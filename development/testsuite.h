@@ -933,68 +933,6 @@ static void mavlink_test_am32_eeprom(uint8_t system_id, uint8_t component_id, ma
 #endif
 }
 
-static void mavlink_test_am32_fw_update_start(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
-{
-#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
-    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
-        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_AM32_FW_UPDATE_START >= 256) {
-            return;
-        }
-#endif
-    mavlink_message_t msg;
-        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
-        uint16_t i;
-    mavlink_am32_fw_update_start_t packet_in = {
-        5,72,139,{ 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77 }
-    };
-    mavlink_am32_fw_update_start_t packet1, packet2;
-        memset(&packet1, 0, sizeof(packet1));
-        packet1.target_system = packet_in.target_system;
-        packet1.target_component = packet_in.target_component;
-        packet1.index = packet_in.index;
-        
-        mav_array_memcpy(packet1.filepath, packet_in.filepath, sizeof(uint8_t)*128);
-        
-#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
-        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
-           // cope with extensions
-           memset(MAVLINK_MSG_ID_AM32_FW_UPDATE_START_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_AM32_FW_UPDATE_START_MIN_LEN);
-        }
-#endif
-        memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_am32_fw_update_start_encode(system_id, component_id, &msg, &packet1);
-    mavlink_msg_am32_fw_update_start_decode(&msg, &packet2);
-        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
-
-        memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_am32_fw_update_start_pack(system_id, component_id, &msg , packet1.target_system , packet1.target_component , packet1.index , packet1.filepath );
-    mavlink_msg_am32_fw_update_start_decode(&msg, &packet2);
-        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
-
-        memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_am32_fw_update_start_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.target_system , packet1.target_component , packet1.index , packet1.filepath );
-    mavlink_msg_am32_fw_update_start_decode(&msg, &packet2);
-        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
-
-        memset(&packet2, 0, sizeof(packet2));
-        mavlink_msg_to_send_buffer(buffer, &msg);
-        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
-            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
-        }
-    mavlink_msg_am32_fw_update_start_decode(last_msg, &packet2);
-        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
-        
-        memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_am32_fw_update_start_send(MAVLINK_COMM_1 , packet1.target_system , packet1.target_component , packet1.index , packet1.filepath );
-    mavlink_msg_am32_fw_update_start_decode(last_msg, &packet2);
-        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
-
-#ifdef MAVLINK_HAVE_GET_MESSAGE_INFO
-    MAVLINK_ASSERT(mavlink_get_message_info_by_name("AM32_FW_UPDATE_START") != NULL);
-    MAVLINK_ASSERT(mavlink_get_message_info_by_id(MAVLINK_MSG_ID_AM32_FW_UPDATE_START) != NULL);
-#endif
-}
-
 static void mavlink_test_am32_fw_update_progress(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
 {
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -1071,7 +1009,6 @@ static void mavlink_test_development(uint8_t system_id, uint8_t component_id, ma
     mavlink_test_target_relative(system_id, component_id, last_msg);
     mavlink_test_control_status(system_id, component_id, last_msg);
     mavlink_test_am32_eeprom(system_id, component_id, last_msg);
-    mavlink_test_am32_fw_update_start(system_id, component_id, last_msg);
     mavlink_test_am32_fw_update_progress(system_id, component_id, last_msg);
 }
 
